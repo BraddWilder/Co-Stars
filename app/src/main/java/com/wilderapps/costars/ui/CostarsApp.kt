@@ -1,32 +1,42 @@
 package com.wilderapps.costars.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.wilderapps.costars.R
+import com.wilderapps.costars.data.CostarsScreens
 import com.wilderapps.costars.ui.screens.comparisonScreen.ComparisonScreen
+import com.wilderapps.costars.ui.screens.components.MyTopAppBar
 import com.wilderapps.costars.ui.screens.peopleSelectScreen.PeopleSelectScreen
 import com.wilderapps.costars.ui.screens.queryScreen.QueryScreen
 import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 
-enum class CostarsScreens(@StringRes val title: Int){
-    QueryScreen(title = R.string.query_screen),
-    PeopleSelectScreen(title = R.string.people_select_screen),
-    ComparisonScreen(title = R.string.comparison_screen)
-}
+
 @Composable
 fun CostarsApp(
     viewModel: QueryViewModel = viewModel(factory = QueryViewModel.Factory),
     navController: NavHostController = rememberNavController()
 ){
-    Scaffold {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = CostarsScreens.valueOf(
+        backStackEntry?.destination?.route ?: CostarsScreens.PeopleSelectScreen.name
+    )
+    val canNavigateBack = navController.previousBackStackEntry != null
+    Scaffold (
+        topBar = {
+            MyTopAppBar(
+                currentScreen = currentScreen,
+                canNavigateBack = canNavigateBack,
+                onNavigateUpClicked = { navController.navigateUp() })
+        }
+    ) {
         innerPadding ->
         //QueryScreen(viewModel = viewModel, modifier = Modifier.padding(innerPadding))
         //PeopleSelectScreen(viewModel = viewModel, modifier = Modifier.padding(innerPadding))
@@ -56,7 +66,7 @@ fun CostarsApp(
                         viewModel.selectedPeople[viewModel.selectedPersonIndex] = it
                         viewModel.query = ""
                         viewModel.getPeople()
-                        navController.navigate(CostarsScreens.PeopleSelectScreen.name)
+                        navController.navigateUp()
                     },
                     modifier = Modifier
                 )
