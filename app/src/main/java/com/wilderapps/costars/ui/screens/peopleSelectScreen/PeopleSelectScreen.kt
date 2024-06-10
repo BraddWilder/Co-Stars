@@ -55,8 +55,12 @@ fun PeopleSelectScreen(
                 }
             }
         }
-        Button(onClick = onCompareClick) {
-            Text("Compare filmography")
+
+        if(viewModel.selectedPeople[0].id != 123 &&
+            viewModel.selectedPeople[1].id != 456) {
+            Button(onClick = onCompareClick) {
+                Text("Compare filmography")
+            }
         }
     }
 }
