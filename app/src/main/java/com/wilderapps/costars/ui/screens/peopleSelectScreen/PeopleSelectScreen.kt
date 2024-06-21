@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.wilderapps.costars.model.Person
 import com.wilderapps.costars.ui.screens.components.PersonItem
@@ -19,7 +20,9 @@ import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 fun PeopleSelectScreen(
     viewModel: QueryViewModel,
     onPersonClick: (Person) -> Unit,
-    onCompareClick: () -> Unit
+    onCompareClick: () -> Unit,
+    nameStyle: TextStyle,
+    knownForStyle: TextStyle
 ){
 //    viewModel.selectedPeople[0] = getDummyPersonOne()
 //    viewModel.selectedPeople[1] = getDummyPersonTwo()
@@ -49,6 +52,8 @@ fun PeopleSelectScreen(
                             onPersonClick(person)
                             viewModel.selectedPersonIndex = index
                         },
+                        nameStyle = nameStyle,
+                        knownForStyle = knownForStyle,
                         modifier = Modifier
                             .height(250.dp)
                     )

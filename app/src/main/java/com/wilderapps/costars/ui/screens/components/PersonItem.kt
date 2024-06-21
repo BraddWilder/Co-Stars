@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -28,6 +29,8 @@ import com.wilderapps.costars.model.Person
 fun PersonItem(
     person: Person,
     onPersonClick: (Person) -> Unit,
+    nameStyle: TextStyle,
+    knownForStyle: TextStyle,
     modifier: Modifier
 ){
     Card(modifier = modifier
@@ -55,7 +58,7 @@ fun PersonItem(
                 contentDescription = person.name,
                 contentScale = ContentScale.Fit,
                 error = painterResource(id = R.drawable.broken_image),
-                placeholder = painterResource(id = R.drawable.broken_image),
+                placeholder = painterResource(id = R.drawable.person_placeholder),
                 modifier = Modifier
                     .padding(start = 8.dp, end = 8.dp)
                     .fillMaxHeight()
@@ -63,9 +66,15 @@ fun PersonItem(
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .fillMaxHeight()
             ) {
-                Text(person.name)
-                Text(person.getKnownFor())
+                Text(
+                    text = person.name,
+                    style = nameStyle)
+                Text(
+                    text = person.getKnownFor(),
+                    style = knownForStyle)
             }
         }
     }

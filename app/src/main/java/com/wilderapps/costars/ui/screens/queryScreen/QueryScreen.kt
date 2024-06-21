@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,8 @@ import com.wilderapps.costars.ui.screens.components.PersonItem
 fun PersonList(
     people: List<Person>,
     onPersonClick: (Person) -> Unit,
+    nameStyle: TextStyle,
+    knownForStyle: TextStyle,
     modifier: Modifier
 ){
     LazyColumn {
@@ -31,6 +34,8 @@ fun PersonList(
             person -> PersonItem(
                 person = person,
                 onPersonClick = onPersonClick,
+                nameStyle = nameStyle,
+                knownForStyle = knownForStyle,
                 modifier = modifier
                     .height(150.dp)
             )
@@ -50,6 +55,8 @@ fun PersonList(
 fun QueryScreen(
     viewModel: QueryViewModel,
     onPersonClick: (Person) -> Unit,
+    nameStyle: TextStyle,
+    knownForStyle: TextStyle,
     modifier: Modifier
 ){
     val uiState = viewModel.uiState
@@ -85,6 +92,8 @@ fun QueryScreen(
             is QueryUiState.Success -> PersonList(
                 people = uiState.people,
                 onPersonClick = onPersonClick,
+                nameStyle = nameStyle,
+                knownForStyle = knownForStyle,
                 modifier = modifier
             )
 

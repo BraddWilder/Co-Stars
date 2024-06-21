@@ -1,6 +1,7 @@
 package com.wilderapps.costars.ui
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,6 +54,8 @@ fun CostarsApp(
                         viewModel.getPeople()
                         navController.navigate(CostarsScreens.QueryScreen.name)
                     },
+                    nameStyle = MaterialTheme.typography.displaySmall,
+                    knownForStyle = MaterialTheme.typography.headlineSmall,
                     onCompareClick = {
                         viewModel.getCredits()
                         navController.navigate(CostarsScreens.ComparisonScreen.name)
@@ -68,12 +71,19 @@ fun CostarsApp(
                         viewModel.getPeople()
                         navController.navigateUp()
                     },
+                    nameStyle = MaterialTheme.typography.headlineSmall,
+                    knownForStyle = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                 )
             }
             composable(route = CostarsScreens.ComparisonScreen.name){
                 ComparisonScreen(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+//                    textStyle = TextStyle(
+//                        fontSize = 20.sp,
+//                        fontWeight = FontWeight.SemiBold
+//                    )
+                    textStyle = MaterialTheme.typography.headlineSmall
                 )
             }
         }

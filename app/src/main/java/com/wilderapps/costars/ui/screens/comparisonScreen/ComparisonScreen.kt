@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -29,20 +31,25 @@ import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 
 @Composable
 fun ComparisonScreen(
-    viewModel: QueryViewModel){
+    viewModel: QueryViewModel,
+    textStyle: TextStyle){
 
     Log.d("Testing People", "${viewModel.selectedPeople.size}")
     for(person in viewModel.selectedPeople){
         Log.d("Testing getCredits","${person.name} credits: ${person.credits.size}")
     }
     Log.d("Testing shared credits","Shared Credits: ${viewModel.sharedProjects.size}")
-    SharedProjectList(sharedProjects = viewModel.sharedProjects)
+    SharedProjectList(
+        sharedProjects = viewModel.sharedProjects,
+        textStyle = textStyle
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedProjectItem(
     sharedProject: SharedProject,
+    textStyle: TextStyle,
     modifier: Modifier
 ){
     Card(modifier = modifier
@@ -56,6 +63,7 @@ fun SharedProjectItem(
             modifier = modifier
                 .padding(8.dp)
                 .fillMaxWidth()
+                .height(120.dp)
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
@@ -65,16 +73,20 @@ fun SharedProjectItem(
                 contentDescription = sharedProject.title,
                 contentScale = ContentScale.Fit,
                 error = painterResource(id = R.drawable.broken_image),
-                placeholder = painterResource(id = R.drawable.broken_image),
+                placeholder = painterResource(id = R.drawable.project_placeholder),
                 modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp)
+                    .padding(start = 8.dp, end = 16.dp)
                     .fillMaxHeight()
             )
             Column(
-                verticalArrangement = Arrangement.SpaceBetween,
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxHeight()
             ) {
-                Text(sharedProject.title)
+                Text(
+                    text = sharedProject.title,
+                    style = textStyle)
             }
         }
     }
@@ -82,7 +94,8 @@ fun SharedProjectItem(
 
 @Composable
 fun SharedProjectList(
-    sharedProjects: List<SharedProject>
+    sharedProjects: List<SharedProject>,
+    textStyle:  TextStyle
 ){
     LazyColumn {
         items(
@@ -91,6 +104,7 @@ fun SharedProjectList(
             sharedProject ->
             SharedProjectItem(
                 sharedProject = sharedProject,
+                textStyle = textStyle,
                 modifier = Modifier
             )
         }
@@ -105,5 +119,8 @@ fun SharedProjectItemPreview(){
         posterPath = "/gt3iyguaCIw8DpQZI1LIN5TohM2.jpg"
     )
 
-    SharedProjectItem(sharedProject = sharedProject, modifier = Modifier)
+    SharedProjectItem(
+        sharedProject = sharedProject,
+        textStyle = TextStyle(),
+        modifier = Modifier)
 }
