@@ -3,6 +3,7 @@ package com.wilderapps.costars.ui.screens.peopleSelectScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
@@ -63,7 +64,10 @@ fun PeopleSelectScreen(
 
         if(viewModel.selectedPeople[0].id != 123 &&
             viewModel.selectedPeople[1].id != 456) {
-            Button(onClick = onCompareClick) {
+            Button(
+                onClick = onCompareClick,
+                modifier = Modifier
+                    .padding(bottom = 8.dp)) {
                 Text("Compare filmography")
             }
         }

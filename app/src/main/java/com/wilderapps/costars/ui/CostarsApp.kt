@@ -16,6 +16,7 @@ import com.wilderapps.costars.data.CostarsScreens
 import com.wilderapps.costars.ui.screens.comparisonScreen.ComparisonScreen
 import com.wilderapps.costars.ui.screens.components.MyTopAppBar
 import com.wilderapps.costars.ui.screens.peopleSelectScreen.PeopleSelectScreen
+import com.wilderapps.costars.ui.screens.projectDetailsScreen.ProjectDetailsScreen
 import com.wilderapps.costars.ui.screens.queryScreen.QueryScreen
 import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 
@@ -79,12 +80,15 @@ fun CostarsApp(
             composable(route = CostarsScreens.ComparisonScreen.name){
                 ComparisonScreen(
                     viewModel = viewModel,
-//                    textStyle = TextStyle(
-//                        fontSize = 20.sp,
-//                        fontWeight = FontWeight.SemiBold
-//                    )
-                    textStyle = MaterialTheme.typography.headlineSmall
+                    textStyle = MaterialTheme.typography.headlineSmall,
+                    onProjectClick = {
+                        viewModel.selectedSharedProject = it
+                        navController.navigate(CostarsScreens.ProjectDetailsScreen.name)
+                    }
                 )
+            }
+            composable(route = CostarsScreens.ProjectDetailsScreen.name){
+                ProjectDetailsScreen(sharedProject = viewModel.selectedSharedProject)
             }
         }
     }

@@ -26,13 +26,16 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.wilderapps.costars.R
+import com.wilderapps.costars.data.getDummyProject
 import com.wilderapps.costars.model.SharedProject
 import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 
 @Composable
 fun ComparisonScreen(
     viewModel: QueryViewModel,
-    textStyle: TextStyle){
+    textStyle: TextStyle,
+    onProjectClick: (SharedProject) -> Unit
+){
 
     Log.d("Testing People", "${viewModel.selectedPeople.size}")
     for(person in viewModel.selectedPeople){
@@ -41,7 +44,8 @@ fun ComparisonScreen(
     Log.d("Testing shared credits","Shared Credits: ${viewModel.sharedProjects.size}")
     SharedProjectList(
         sharedProjects = viewModel.sharedProjects,
-        textStyle = textStyle
+        textStyle = textStyle,
+        onProjectClick = onProjectClick
     )
 }
 
@@ -50,20 +54,21 @@ fun ComparisonScreen(
 fun SharedProjectItem(
     sharedProject: SharedProject,
     textStyle: TextStyle,
+    onProjectClick: (SharedProject) -> Unit,
     modifier: Modifier
 ){
     Card(modifier = modifier
         .padding(8.dp)
         .fillMaxSize(),
         onClick = {
-
+            onProjectClick(sharedProject)
         }) {
         Row(verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.Start,
             modifier = modifier
                 .padding(8.dp)
                 .fillMaxWidth()
-                .height(120.dp)
+                .height(80.dp)
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
@@ -95,6 +100,7 @@ fun SharedProjectItem(
 @Composable
 fun SharedProjectList(
     sharedProjects: List<SharedProject>,
+    onProjectClick: (SharedProject) -> Unit,
     textStyle:  TextStyle
 ){
     LazyColumn {
@@ -105,6 +111,7 @@ fun SharedProjectList(
             SharedProjectItem(
                 sharedProject = sharedProject,
                 textStyle = textStyle,
+                onProjectClick = onProjectClick,
                 modifier = Modifier
             )
         }
@@ -114,13 +121,9 @@ fun SharedProjectList(
 @Preview
 @Composable
 fun SharedProjectItemPreview(){
-    val sharedProject = SharedProject(
-        title = "Twelve Monkeys",
-        posterPath = "/gt3iyguaCIw8DpQZI1LIN5TohM2.jpg"
-    )
-
     SharedProjectItem(
-        sharedProject = sharedProject,
+        sharedProject = getDummyProject(),
         textStyle = TextStyle(),
+        onProjectClick = {},
         modifier = Modifier)
 }

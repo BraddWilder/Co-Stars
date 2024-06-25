@@ -32,6 +32,7 @@ class QueryViewModel (private val costarsRepository: CostarsRepository): ViewMod
     var selectedPeople = mutableStateListOf(Person(id = 123), Person(id = 456))
     var selectedPersonIndex by mutableIntStateOf(0)
     var sharedProjects = mutableStateListOf<SharedProject>()
+    var selectedSharedProject by mutableStateOf(SharedProject())
 
     fun getPeople(){
         viewModelScope.launch {

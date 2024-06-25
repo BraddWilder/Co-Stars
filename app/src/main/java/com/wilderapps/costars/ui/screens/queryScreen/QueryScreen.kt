@@ -11,8 +11,11 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,16 +44,9 @@ fun PersonList(
             )
         }
     }
-
-//    LazyVerticalGrid(
-//        columns = GridCells.Fixed(1)
-//    ) {
-//        items(items = people, key = {person -> person.id}){
-//            person -> GridItem(person = person, modifier = modifier)
-//        }
-//    }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun QueryScreen(
     viewModel: QueryViewModel,
@@ -60,6 +56,8 @@ fun QueryScreen(
     modifier: Modifier
 ){
     val uiState = viewModel.uiState
+    val controller = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     Column() {
         OutlinedTextField(
             value = viewModel.query,
@@ -72,14 +70,16 @@ fun QueryScreen(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     viewModel.getPeople()
-
+                    controller?.hide()
+                    focusManager.clearFocus()
                 }
             ),
             modifier = Modifier
                 .onKeyEvent { e ->
                     if (e.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
                         viewModel.getPeople()
-
+                        controller?.hide()
+                        focusManager.clearFocus()
                     }
                     false
                 }
@@ -96,7 +96,6 @@ fun QueryScreen(
                 knownForStyle = knownForStyle,
                 modifier = modifier
             )
-
             is QueryUiState.Error -> {}
         }
     }

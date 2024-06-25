@@ -77,11 +77,16 @@ data class Person(
         val sharedProject = SharedProject(
             id = credit.id,
             posterPath = credit.posterPath,
-            popularity = credit.popularity)
-        if(credit.mediaType == "tv")
+            popularity = credit.popularity,
+            summary = credit.overview)
+        if(credit.mediaType == "tv") {
             sharedProject.title = credit.name
-        else
+            sharedProject.releaseDate = credit.firstAirDate
+        }
+        else {
             sharedProject.title = credit.title
+            sharedProject.releaseDate = credit.releaseDate
+        }
 
         return sharedProject
     }
