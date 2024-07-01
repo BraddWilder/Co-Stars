@@ -6,7 +6,8 @@ data class SharedProject(
     var posterPath: String? = "",
     var popularity: Double = 0.00,
     var releaseDate: String = "",
-    var summary: String = ""
+    var summary: String = "",
+    var mediaType: String = ""
     /*var people: MutableList<Person> = mutableListOf()*/
 ){
     fun getFullPosterPath(): String{

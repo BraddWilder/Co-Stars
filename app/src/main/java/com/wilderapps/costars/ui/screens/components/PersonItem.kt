@@ -1,12 +1,10 @@
 package com.wilderapps.costars.ui.screens.components
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,6 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -38,35 +37,45 @@ fun PersonItem(
         .fillMaxSize(),
         onClick = {
             onPersonClick(person)
-            Log.d("Testing Card Click", "Name: ${person.name}")
-            Log.d("Testing Card Click", "Popularity: ${person.popularity}")
-            Log.d("Testing Card Click", "Original Name: ${person.originalName}")
-            Log.d("Testing Card Click", "Profile Path: ${person.profilePath}")
-            Log.d("Testing Card Click", "Full Profile Path: ${person.getFullProfilePath()}")
         }) {
         Row(verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.Start,
             modifier = modifier
                 .padding(8.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(person.getFullProfilePath())
-                    .crossfade(true)
-                    .build(),
-                contentDescription = person.name,
-                contentScale = ContentScale.Fit,
-                error = painterResource(id = R.drawable.broken_image),
-                placeholder = painterResource(id = R.drawable.person_placeholder),
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp)
-                    .fillMaxHeight()
-            )
+            if(person.profilePath != "") {
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(person.getFullProfilePath())
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = person.name,
+                    contentScale = ContentScale.Fit,
+                    error = painterResource(id = R.drawable.broken_image),
+                    placeholder = painterResource(id = R.drawable.person_placeholder),
+                    modifier = modifier
+                        .padding(start = 8.dp, end = 8.dp)
+                        .fillMaxHeight()
+                )
+            } else {
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(person.getFullProfilePath())
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = person.name,
+                    contentScale = ContentScale.Fit,
+                    error = painterResource(id = R.drawable.person_placeholder),
+                    modifier = modifier
+                        .padding(start = 8.dp, end = 8.dp)
+                        .fillMaxHeight()
+                )
+            }
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.Start,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxHeight()
             ) {
                 Text(
@@ -74,7 +83,8 @@ fun PersonItem(
                     style = nameStyle)
                 Text(
                     text = person.getKnownFor(),
-                    style = knownForStyle)
+                    style = knownForStyle,
+                    overflow = TextOverflow.Ellipsis)
             }
         }
     }

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +33,7 @@ fun ProjectDetailsScreen(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .padding(8.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -55,17 +58,49 @@ fun ProjectDetailsScreen(
                     .height(300.dp)
             )
         }
-        Row() {
-           Text(
-               text = "Release date:",
-               style = MaterialTheme.typography.bodyMedium,
-               fontWeight = FontWeight.SemiBold,
-               modifier = Modifier
-                   .padding(start = 8.dp, end = 8.dp)
-           )
-            Text(
-                text = sharedProject.releaseDate,
-                style = MaterialTheme.typography.bodyMedium)
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            Row() {
+                Text(
+                    text = "Release date:",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                )
+                Text(
+                    text = sharedProject.releaseDate,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(end = 8.dp)
+            ) {
+                Text(
+                    text = "Media Type: ",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                )
+                if (sharedProject.mediaType == "movie") {
+                    Text(
+                        text = "Movie",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                } else {
+                    Text(
+                        text = "TV Series",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
         Text(
             text = sharedProject.summary,

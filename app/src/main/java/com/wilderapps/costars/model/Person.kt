@@ -78,7 +78,8 @@ data class Person(
             id = credit.id,
             posterPath = credit.posterPath,
             popularity = credit.popularity,
-            summary = credit.overview)
+            summary = credit.overview,
+            mediaType = credit.mediaType)
         if(credit.mediaType == "tv") {
             sharedProject.title = credit.name
             sharedProject.releaseDate = credit.firstAirDate

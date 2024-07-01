@@ -17,6 +17,7 @@ kotlinxSerializationJson = "1.5.1"
 converterGson = "2.9.0"
 navigationCompose = "2.7.7"
 okhttp = "4.11.0"
+coilSVG = "2.6.0"
 
 
 [libraries]
@@ -42,6 +43,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose"
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson"}
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose"}
+coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilSVG"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

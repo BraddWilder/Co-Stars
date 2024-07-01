@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Co-Stars</string>
+    <string name="app_name_plural_possessive">Co-Stars\'</string>
     <string name="query_screen">Search</string>
     <string name="people_select_screen">People Select</string>
     <string name="comparison_screen">Comparison</string>
     <string name="project_details_screen">Details</string>
+    <string name="about_screen">About</string>
 </resources>

@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.wilderapps.costars.data.CostarsScreens
+import com.wilderapps.costars.ui.screens.aboutScreen.AboutScreen
 import com.wilderapps.costars.ui.screens.comparisonScreen.ComparisonScreen
 import com.wilderapps.costars.ui.screens.components.MyTopAppBar
 import com.wilderapps.costars.ui.screens.peopleSelectScreen.PeopleSelectScreen
@@ -36,7 +37,8 @@ fun CostarsApp(
             MyTopAppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = canNavigateBack,
-                onNavigateUpClicked = { navController.navigateUp() })
+                onNavigateUpClicked = { navController.navigateUp() },
+                onAboutClicked = { navController.navigate(CostarsScreens.AboutScreen.name) })
         }
     ) {
         innerPadding ->
@@ -56,7 +58,7 @@ fun CostarsApp(
                         navController.navigate(CostarsScreens.QueryScreen.name)
                     },
                     nameStyle = MaterialTheme.typography.displaySmall,
-                    knownForStyle = MaterialTheme.typography.headlineSmall,
+                    knownForStyle = MaterialTheme.typography.titleLarge,
                     onCompareClick = {
                         viewModel.getCredits()
                         navController.navigate(CostarsScreens.ComparisonScreen.name)
@@ -89,6 +91,9 @@ fun CostarsApp(
             }
             composable(route = CostarsScreens.ProjectDetailsScreen.name){
                 ProjectDetailsScreen(sharedProject = viewModel.selectedSharedProject)
+            }
+            composable(route = CostarsScreens.AboutScreen.name){
+                AboutScreen()
             }
         }
     }

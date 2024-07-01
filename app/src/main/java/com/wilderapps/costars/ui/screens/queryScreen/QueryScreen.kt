@@ -1,6 +1,7 @@
 package com.wilderapps.costars.ui.screens.queryScreen
 
 import android.view.KeyEvent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
@@ -21,6 +23,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.wilderapps.costars.model.Person
+import com.wilderapps.costars.ui.screens.components.ErrorScreen
 import com.wilderapps.costars.ui.screens.components.PersonItem
 
 
@@ -58,7 +61,10 @@ fun QueryScreen(
     val uiState = viewModel.uiState
     val controller = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    Column() {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         OutlinedTextField(
             value = viewModel.query,
             onValueChange = { viewModel.query = it },
@@ -96,7 +102,7 @@ fun QueryScreen(
                 knownForStyle = knownForStyle,
                 modifier = modifier
             )
-            is QueryUiState.Error -> {}
+            is QueryUiState.Error -> ErrorScreen { viewModel.getPeople() }
         }
     }
 }

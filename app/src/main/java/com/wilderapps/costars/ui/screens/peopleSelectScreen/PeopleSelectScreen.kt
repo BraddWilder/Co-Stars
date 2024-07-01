@@ -25,8 +25,6 @@ fun PeopleSelectScreen(
     nameStyle: TextStyle,
     knownForStyle: TextStyle
 ){
-//    viewModel.selectedPeople[0] = getDummyPersonOne()
-//    viewModel.selectedPeople[1] = getDummyPersonTwo()
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -38,14 +36,6 @@ fun PeopleSelectScreen(
         ) {
             LazyColumn (
             ){
-//                items(items = viewModel.selectedPeople, key = {person -> person.id}){
-//                    person -> PersonItem(
-//                        person = person,
-//                        onPersonClick = onPersonClick,
-//                        modifier = Modifier
-//                            .height(250.dp)
-//                    )
-//                }
                 itemsIndexed(items = viewModel.selectedPeople){
                     index: Int, person: Person -> PersonItem(
                         person = person,

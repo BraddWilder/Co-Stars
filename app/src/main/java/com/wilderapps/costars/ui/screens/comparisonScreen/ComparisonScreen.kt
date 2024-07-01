@@ -1,18 +1,19 @@
 package com.wilderapps.costars.ui.screens.comparisonScreen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,17 +37,15 @@ fun ComparisonScreen(
     textStyle: TextStyle,
     onProjectClick: (SharedProject) -> Unit
 ){
-
-    Log.d("Testing People", "${viewModel.selectedPeople.size}")
-    for(person in viewModel.selectedPeople){
-        Log.d("Testing getCredits","${person.name} credits: ${person.credits.size}")
+    if(viewModel.sharedProjects.size == 0){
+        NoSharedProjects()
+    } else {
+        SharedProjectList(
+            sharedProjects = viewModel.sharedProjects,
+            textStyle = textStyle,
+            onProjectClick = onProjectClick
+        )
     }
-    Log.d("Testing shared credits","Shared Credits: ${viewModel.sharedProjects.size}")
-    SharedProjectList(
-        sharedProjects = viewModel.sharedProjects,
-        textStyle = textStyle,
-        onProjectClick = onProjectClick
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,35 +62,60 @@ fun SharedProjectItem(
         onClick = {
             onProjectClick(sharedProject)
         }) {
-        Row(verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.Start,
+        Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = modifier
                 .padding(8.dp)
                 .fillMaxWidth()
-                .height(80.dp)
+                .defaultMinSize(minHeight = 80.dp)
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(sharedProject.getFullPosterPath())
-                    .crossfade(true)
-                    .build(),
-                contentDescription = sharedProject.title,
-                contentScale = ContentScale.Fit,
-                error = painterResource(id = R.drawable.broken_image),
-                placeholder = painterResource(id = R.drawable.project_placeholder),
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 16.dp)
-                    .fillMaxHeight()
-            )
+            if(sharedProject.posterPath != null) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(sharedProject.getFullPosterPath())
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = sharedProject.title,
+                    contentScale = ContentScale.Fit,
+                    error = painterResource(id = R.drawable.broken_image),
+                    placeholder = painterResource(id = R.drawable.project_placeholder),
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 16.dp)
+                        .fillMaxHeight()
+                )
+            } else {
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(sharedProject.getFullPosterPath())
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = sharedProject.title,
+                    contentScale = ContentScale.Fit,
+                    error = painterResource(id = R.drawable.project_placeholder),
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 16.dp)
+                        .fillMaxHeight()
+                )
+            }
             Column(
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxHeight()
+                    .weight(1f)
             ) {
                 Text(
                     text = sharedProject.title,
                     style = textStyle)
+            }
+            if(sharedProject.mediaType == "movie"){
+                Icon(painter = painterResource(id = R.drawable.project_placeholder),
+                    contentDescription = "Movie")
+            } else {
+                Icon(
+                    painter = painterResource(id = R.drawable.media_type_tv),
+                    contentDescription = "TV Series"
+                )
             }
         }
     }
@@ -115,6 +139,23 @@ fun SharedProjectList(
                 modifier = Modifier
             )
         }
+    }
+}
+
+@Composable
+fun NoSharedProjects(){
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ){
+        Text(
+            text = "There are no shared projects between the people you have selected.",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier
+                .padding(8.dp))
     }
 }
 
