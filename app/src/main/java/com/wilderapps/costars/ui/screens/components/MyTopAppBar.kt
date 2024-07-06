@@ -1,6 +1,7 @@
 package com.wilderapps.costars.ui.screens.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -24,7 +25,8 @@ fun MyTopAppBar(
     currentScreen: CostarsScreens,
     canNavigateBack: Boolean,
     onNavigateUpClicked: () -> Unit,
-    onAboutClicked: () -> Unit
+    onAboutClicked: () -> Unit,
+    onAddClicked: () -> Unit
 ){
     var menuExpanded by remember{
         mutableStateOf(false)
@@ -42,6 +44,14 @@ fun MyTopAppBar(
             }
         },
         actions = {
+            if(currentScreen.title == CostarsScreens.PeopleSelectScreen.title){
+                IconButton(onClick = onAddClicked){
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "Add new person"
+                    )
+                }
+            }
             IconButton(onClick = { menuExpanded = !menuExpanded }) {
                 Icon(
                     imageVector = Icons.Filled.MoreVert,

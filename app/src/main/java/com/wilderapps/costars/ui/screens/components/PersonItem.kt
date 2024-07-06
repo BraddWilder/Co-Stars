@@ -5,9 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,6 +35,8 @@ fun PersonItem(
     onPersonClick: (Person) -> Unit,
     nameStyle: TextStyle,
     knownForStyle: TextStyle,
+    isDeleteAvailable: Boolean = false,
+    onDeleteClick: (Person) -> Unit = {},
     modifier: Modifier
 ){
     Card(modifier = modifier
@@ -78,9 +85,25 @@ fun PersonItem(
                 modifier = modifier
                     .fillMaxHeight()
             ) {
-                Text(
-                    text = person.name,
-                    style = nameStyle)
+                Row(horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top,
+                    modifier = Modifier
+                        .fillMaxWidth()) {
+                    Text(
+                        text = person.name,
+                        style = nameStyle,
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    if(isDeleteAvailable) {
+                        IconButton(onClick = { onDeleteClick(person) }) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Delete person"
+                            )
+                        }
+                    }
+                }
                 Text(
                     text = person.getKnownFor(),
                     style = knownForStyle,

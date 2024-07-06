@@ -26,10 +26,10 @@ class QueryViewModel (private val costarsRepository: CostarsRepository): ViewMod
 
     var uiState: QueryUiState by mutableStateOf(QueryUiState.Loading)
         private set
-    var query by mutableStateOf("Brad")
+    var query by mutableStateOf("")
 //    var firstPerson by mutableStateOf(Person())
 //    var secondPerson by mutableStateOf(Person())
-    var selectedPeople = mutableStateListOf(Person(id = 123), Person(id = 456))
+    var selectedPeople: MutableList<Person> = mutableStateListOf()
     var selectedPersonIndex by mutableIntStateOf(0)
     var sharedProjects = mutableStateListOf<SharedProject>()
     var selectedSharedProject by mutableStateOf(SharedProject())
@@ -52,7 +52,7 @@ class QueryViewModel (private val costarsRepository: CostarsRepository): ViewMod
         }
     }
 
-    fun getCredits(){
+    fun compareCredits(){
         viewModelScope.launch {
             for(person in selectedPeople){
                 if(person.credits.isEmpty()) {
@@ -65,8 +65,20 @@ class QueryViewModel (private val costarsRepository: CostarsRepository): ViewMod
                     }
                 }
             }
+
             sharedProjects.clear()
-            sharedProjects.addAll(selectedPeople[0].getSharedCredits(selectedPeople[1]))
+
+            var sharedProjectList = emptyList<SharedProject>().toMutableList()
+            for((index, person) in selectedPeople.withIndex()){
+                if(index == 0){
+                    for(credit in person.credits){
+                        sharedProjectList.add(person.createSharedCredit(credit))
+                    }
+                } else {
+                    sharedProjectList = person.getSharedCredits(sharedProjectList).toMutableList()
+                }
+            }
+            sharedProjects.addAll(sharedProjectList)
         }
     }
 

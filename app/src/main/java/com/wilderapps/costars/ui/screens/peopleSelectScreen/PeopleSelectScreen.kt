@@ -2,6 +2,8 @@ package com.wilderapps.costars.ui.screens.peopleSelectScreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,8 +24,10 @@ fun PeopleSelectScreen(
     viewModel: QueryViewModel,
     onPersonClick: (Person) -> Unit,
     onCompareClick: () -> Unit,
+    onClearClick: () -> Unit,
     nameStyle: TextStyle,
-    knownForStyle: TextStyle
+    knownForStyle: TextStyle,
+    onDeleteClick: (Person) -> Unit
 ){
     Column(
         verticalArrangement = Arrangement.Center,
@@ -45,6 +49,10 @@ fun PeopleSelectScreen(
                         },
                         nameStyle = nameStyle,
                         knownForStyle = knownForStyle,
+                        isDeleteAvailable = true,
+                        onDeleteClick = {
+                            onDeleteClick(person)
+                        },
                         modifier = Modifier
                             .height(250.dp)
                     )
@@ -52,12 +60,31 @@ fun PeopleSelectScreen(
             }
         }
 
-        if(viewModel.selectedPeople[0].id != 123 &&
-            viewModel.selectedPeople[1].id != 456) {
+        Row(horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)) {
+            var isCompareAvailable = false
+            var isClearAvailable = false
+            if(viewModel.selectedPeople.size > 1) {
+                isCompareAvailable = true
+            }
+            if(viewModel.selectedPeople.size > 0){
+                isClearAvailable = true
+            }
+
+            Button(
+                onClick = onClearClick,
+                enabled = isClearAvailable
+            ){
+                Text("Clear Selected People")
+            }
+
             Button(
                 onClick = onCompareClick,
-                modifier = Modifier
-                    .padding(bottom = 8.dp)) {
+                enabled = isCompareAvailable
+            ) {
                 Text("Compare filmography")
             }
         }

@@ -38,7 +38,11 @@ fun CostarsApp(
                 currentScreen = currentScreen,
                 canNavigateBack = canNavigateBack,
                 onNavigateUpClicked = { navController.navigateUp() },
-                onAboutClicked = { navController.navigate(CostarsScreens.AboutScreen.name) })
+                onAboutClicked = { navController.navigate(CostarsScreens.AboutScreen.name) },
+                onAddClicked = {
+                    viewModel.selectedPersonIndex = -1
+                    navController.navigate(CostarsScreens.QueryScreen.name)
+                })
         }
     ) {
         innerPadding ->
@@ -60,8 +64,14 @@ fun CostarsApp(
                     nameStyle = MaterialTheme.typography.displaySmall,
                     knownForStyle = MaterialTheme.typography.titleLarge,
                     onCompareClick = {
-                        viewModel.getCredits()
+                        viewModel.compareCredits()
                         navController.navigate(CostarsScreens.ComparisonScreen.name)
+                    },
+                    onClearClick = {
+                        viewModel.selectedPeople.clear()
+                    },
+                    onDeleteClick = {
+                        viewModel.selectedPeople.remove(it)
                     }
                 )
             }
@@ -69,7 +79,11 @@ fun CostarsApp(
                 QueryScreen(
                     viewModel = viewModel,
                     onPersonClick = {
-                        viewModel.selectedPeople[viewModel.selectedPersonIndex] = it
+                        if(viewModel.selectedPersonIndex != -1) {
+                            viewModel.selectedPeople[viewModel.selectedPersonIndex] = it
+                        } else {
+                            viewModel.selectedPeople.add(it)
+                        }
                         viewModel.query = ""
                         viewModel.getPeople()
                         navController.navigateUp()
