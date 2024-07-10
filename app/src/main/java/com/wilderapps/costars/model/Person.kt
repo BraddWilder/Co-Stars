@@ -112,4 +112,28 @@ data class Person(
 
         return sharedProject
     }
+
+    fun getCreditNames(creditId: Int): String{
+        var creditNames = ""
+
+        for(credit in credits){
+            if(credit.id == creditId){
+                if(creditNames.isEmpty()){
+                    creditNames = if(credit.characterName.isEmpty()){
+                        credit.job
+                    } else {
+                        credit.characterName
+                    }
+                } else {
+                    creditNames += if(credit.characterName.isEmpty()){
+                        ", ${credit.job}"
+                    } else {
+                        ", ${credit.characterName}"
+                    }
+                }
+            }
+        }
+
+        return creditNames
+    }
 }

@@ -37,6 +37,7 @@ fun PersonItem(
     knownForStyle: TextStyle,
     isDeleteAvailable: Boolean = false,
     onDeleteClick: (Person) -> Unit = {},
+    creditId: Int = -1,
     modifier: Modifier
 ){
     Card(modifier = modifier
@@ -104,10 +105,19 @@ fun PersonItem(
                         }
                     }
                 }
-                Text(
-                    text = person.getKnownFor(),
-                    style = knownForStyle,
-                    overflow = TextOverflow.Ellipsis)
+                if(creditId == -1) {
+                    Text(
+                        text = person.getKnownFor(),
+                        style = knownForStyle,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                } else {
+                    Text(
+                        text = person.getCreditNames(creditId),
+                        style = knownForStyle,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }

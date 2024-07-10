@@ -104,7 +104,12 @@ fun CostarsApp(
                 )
             }
             composable(route = CostarsScreens.ProjectDetailsScreen.name){
-                ProjectDetailsScreen(sharedProject = viewModel.selectedSharedProject)
+                ProjectDetailsScreen(
+                    viewModel = viewModel,
+                    sharedProject = viewModel.selectedSharedProject,
+                    nameStyle = MaterialTheme.typography.headlineSmall,
+                    creditStyle = MaterialTheme.typography.titleMedium
+                )
             }
             composable(route = CostarsScreens.AboutScreen.name){
                 AboutScreen()

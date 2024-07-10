@@ -37,6 +37,10 @@ data class Credit(
     @SerializedName(value = "first_air_date")
     var firstAirDate: String = "",
 
+    //Cast Specific Fields
+    @SerializedName(value = "character")
+    var characterName: String = "",
+
     //Crew Specific Fields
     var department: String = "",
     var job: String = ""
