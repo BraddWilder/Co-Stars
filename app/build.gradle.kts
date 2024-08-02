@@ -74,6 +74,9 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.svg)
 
+    //Admob
+    implementation(libs.play.services.ads)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

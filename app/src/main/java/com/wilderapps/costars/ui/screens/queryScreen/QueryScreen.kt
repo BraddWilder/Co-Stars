@@ -3,6 +3,7 @@ package com.wilderapps.costars.ui.screens.queryScreen
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.wilderapps.costars.model.Person
+import com.wilderapps.costars.ui.screens.components.BannerAd
 import com.wilderapps.costars.ui.screens.components.ErrorScreen
 import com.wilderapps.costars.ui.screens.components.PersonItem
 
@@ -62,8 +64,9 @@ fun QueryScreen(
     val controller = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
     ) {
         OutlinedTextField(
             value = viewModel.query,
@@ -93,16 +96,23 @@ fun QueryScreen(
                 .padding(8.dp)
         )
 
-        when (uiState) {
-            is QueryUiState.Loading -> {}
-            is QueryUiState.Success -> PersonList(
-                people = uiState.people,
-                onPersonClick = onPersonClick,
-                nameStyle = nameStyle,
-                knownForStyle = knownForStyle,
-                modifier = modifier
-            )
-            is QueryUiState.Error -> ErrorScreen { viewModel.getPeople() }
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            when (uiState) {
+                is QueryUiState.Loading -> {}
+                is QueryUiState.Success -> PersonList(
+                    people = uiState.people,
+                    onPersonClick = onPersonClick,
+                    nameStyle = nameStyle,
+                    knownForStyle = knownForStyle,
+                    modifier = modifier
+                )
+
+                is QueryUiState.Error -> ErrorScreen { viewModel.getPeople() }
+            }
         }
+
+        BannerAd()
     }
 }

@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.wilderapps.costars.R
 import com.wilderapps.costars.model.SharedProject
+import com.wilderapps.costars.ui.screens.components.BannerAd
 import com.wilderapps.costars.ui.screens.components.PersonItem
 import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 
@@ -35,13 +36,14 @@ fun ProjectDetailsScreen(
     nameStyle: TextStyle,
     creditStyle: TextStyle
     ){
-    Column() {
+    Column {
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
+                .weight(1f)
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -137,6 +139,6 @@ fun ProjectDetailsScreen(
                 }
             }
         }
-
+        BannerAd()
     }
 }

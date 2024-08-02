@@ -30,22 +30,30 @@ import coil.request.ImageRequest
 import com.wilderapps.costars.R
 import com.wilderapps.costars.data.getDummyProject
 import com.wilderapps.costars.model.SharedProject
+import com.wilderapps.costars.ui.screens.components.BannerAd
 import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 
 @Composable
 fun ComparisonScreen(
     viewModel: QueryViewModel,
     textStyle: TextStyle,
-    onProjectClick: (SharedProject) -> Unit
+    onProjectClick: (SharedProject) -> Unit,
 ){
-    if(viewModel.sharedProjects.size == 0){
-        NoSharedProjects()
-    } else {
-        SharedProjectList(
-            sharedProjects = viewModel.sharedProjects,
-            textStyle = textStyle,
-            onProjectClick = onProjectClick
-        )
+    Column(verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            if (viewModel.sharedProjects.size == 0) {
+                NoSharedProjects()
+            } else {
+                SharedProjectList(
+                    sharedProjects = viewModel.sharedProjects,
+                    textStyle = textStyle,
+                    onProjectClick = onProjectClick
+                )
+            }
+        }
+        BannerAd()
     }
 }
 
