@@ -1,12 +1,22 @@
 package com.wilderapps.costars.ui
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,6 +42,18 @@ fun CostarsApp(
         backStackEntry?.destination?.route ?: CostarsScreens.PeopleSelectScreen.name
     )
     val canNavigateBack = navController.previousBackStackEntry != null
+    val noEnterTransition : AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
+        fadeIn(
+            animationSpec = tween(durationMillis = 300),
+            initialAlpha = 0.99f
+        )
+    }
+    val noExitTransition : AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
+        fadeOut(
+            animationSpec = tween(durationMillis = 300),
+            targetAlpha = 0.99f
+        )
+    }
     Scaffold (
         topBar = {
             MyTopAppBar(
@@ -40,8 +62,10 @@ fun CostarsApp(
                 onNavigateUpClicked = { navController.navigateUp() },
                 onAboutClicked = { navController.navigate(CostarsScreens.AboutScreen.name) },
                 onAddClicked = {
-                    viewModel.selectedPersonIndex = -1
-                    navController.navigate(CostarsScreens.QueryScreen.name)
+                    if(backStackEntry!!.lifecycleIsResumed()) {
+                        viewModel.selectedPersonIndex = -1
+                        navController.navigate(CostarsScreens.QueryScreen.name)
+                    }
                 })
         }
     ) {
@@ -53,53 +77,65 @@ fun CostarsApp(
             startDestination = CostarsScreens.PeopleSelectScreen.name,
             modifier = Modifier.padding(innerPadding)
         ){
-            composable(route = CostarsScreens.PeopleSelectScreen.name){
+            composable(route = CostarsScreens.PeopleSelectScreen.name){from: NavBackStackEntry ->
                 PeopleSelectScreen(
                     viewModel = viewModel,
                     onPersonClick = {
-                        viewModel.query = it.name
-                        viewModel.getPeople()
-                        navController.navigate(CostarsScreens.QueryScreen.name)
+                        if(from.lifecycleIsResumed()) {
+                            viewModel.query = it.name
+                            viewModel.getPeople()
+                            navController.navigate(CostarsScreens.QueryScreen.name)
+                        }
                     },
-                    nameStyle = MaterialTheme.typography.displaySmall,
-                    knownForStyle = MaterialTheme.typography.titleLarge,
+                    nameStyle = MaterialTheme.typography.headlineMedium,
+                    knownForStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal, fontSize = 18.sp),
                     onCompareClick = {
-                        viewModel.compareCredits()
-                        navController.navigate(CostarsScreens.ComparisonScreen.name)
+                        if(from.lifecycleIsResumed()) {
+                            viewModel.compareCredits()
+                            navController.navigate(CostarsScreens.ComparisonScreen.name)
+                        }
                     },
                     onClearClick = {
-                        viewModel.selectedPeople.clear()
+                        if(from.lifecycleIsResumed()) {
+                            viewModel.selectedPeople.clear()
+                        }
                     },
                     onDeleteClick = {
-                        viewModel.selectedPeople.remove(it)
+                        if(from.lifecycleIsResumed()) {
+                            viewModel.selectedPeople.remove(it)
+                        }
                     }
                 )
             }
-            composable(route = CostarsScreens.QueryScreen.name){
+            composable(route = CostarsScreens.QueryScreen.name){from: NavBackStackEntry ->
                 QueryScreen(
                     viewModel = viewModel,
                     onPersonClick = {
-                        if(viewModel.selectedPersonIndex != -1) {
-                            viewModel.selectedPeople[viewModel.selectedPersonIndex] = it
-                        } else {
-                            viewModel.selectedPeople.add(it)
+                        if(from.lifecycleIsResumed()) {
+                            if (viewModel.selectedPersonIndex != -1) {
+                                viewModel.selectedPeople[viewModel.selectedPersonIndex] = it
+                            } else {
+                                viewModel.selectedPeople.add(it)
+                            }
+                            viewModel.query = ""
+                            viewModel.getPeople()
+                            navController.navigateUp()
                         }
-                        viewModel.query = ""
-                        viewModel.getPeople()
-                        navController.navigateUp()
                     },
-                    nameStyle = MaterialTheme.typography.headlineSmall,
-                    knownForStyle = MaterialTheme.typography.titleMedium,
+                    nameStyle = MaterialTheme.typography.titleLarge,
+                    knownForStyle = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                 )
             }
-            composable(route = CostarsScreens.ComparisonScreen.name){
+            composable(route = CostarsScreens.ComparisonScreen.name){ from: NavBackStackEntry ->
                 ComparisonScreen(
                     viewModel = viewModel,
                     textStyle = MaterialTheme.typography.headlineSmall,
                     onProjectClick = {
-                        viewModel.selectedSharedProject = it
-                        navController.navigate(CostarsScreens.ProjectDetailsScreen.name)
+                        if(from.lifecycleIsResumed()) {
+                            viewModel.selectedSharedProject = it
+                            navController.navigate(CostarsScreens.ProjectDetailsScreen.name)
+                        }
                     }
                 )
             }
@@ -117,4 +153,7 @@ fun CostarsApp(
         }
     }
 }
+
+private fun NavBackStackEntry.lifecycleIsResumed() =
+    this.lifecycle.currentState == Lifecycle.State.RESUMED
 

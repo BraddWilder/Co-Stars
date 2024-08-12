@@ -56,7 +56,7 @@ fun PeopleSelectScreen(
                             onDeleteClick(person)
                         },
                         modifier = Modifier
-                            .height(250.dp)
+                            .height(200.dp)
                     )
                 }
             }
