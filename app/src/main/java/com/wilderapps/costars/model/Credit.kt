@@ -1,13 +1,19 @@
 package com.wilderapps.costars.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
+@Entity
 @Serializable
 data class Credit(
     @SerializedName(value = "backdrop_path")
     var backdropPath: String = "",
     var id: Int = 1,
+    @PrimaryKey(autoGenerate = false)
+    @SerializedName(value = "credit_id")
+    var creditId: String = "",
     @SerializedName(value = "original_title")
     var originalTitle: String = "",
     var overview: String = "",
@@ -26,6 +32,9 @@ data class Credit(
     var voteAverage: Double = 0.0,
     @SerializedName(value = "vote_count")
     var voteCount: Double = 0.0,
+
+    //Person Table field
+    var personId: Int = 0,
 
     //Movie Specific Fields
     @SerializedName(value = "release_date")

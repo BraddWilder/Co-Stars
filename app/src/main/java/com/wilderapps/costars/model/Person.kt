@@ -1,13 +1,19 @@
 package com.wilderapps.costars.model
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
+@Entity
 @Serializable
 data class Person(
     var adult: Boolean = false,
     var gender: Int = 1,
-    var id: Int = 1,
+    @PrimaryKey(autoGenerate = false)
+    @SerializedName(value="id")
+    var personId: Int = 1,
     @SerializedName(value = "known_for_department")
     var knownForDepartment: String = "",
     var name: String = "",
@@ -17,34 +23,12 @@ data class Person(
     @SerializedName(value = "profile_path")
     var profilePath: String = "",
     @SerializedName(value = "known_for")
+    @Ignore
     var knownFor: List<Credit> = emptyList(),
-    var credits: List<Credit> = emptyList()
+    @Ignore
+    var credits: List<Credit> = emptyList(),
+    var knownForString: String = ""
     ){
-    fun getKnownFor(): String{
-        var knownForString = ""
-        var isMovie: Boolean
-
-        for((index, movie) in knownFor.withIndex()){
-            isMovie = movie.mediaType == "movie"
-            if(isMovie) {
-                if (knownFor.size == 1)
-                    knownForString = movie.title
-                else if (index == knownFor.size - 1)
-                    knownForString += "& ${movie.title}"
-                else
-                    knownForString += "${movie.title}, "
-            } else {
-                if (knownFor.size == 1)
-                    knownForString = movie.name
-                else if (index == knownFor.size - 1)
-                    knownForString += "& ${movie.name}"
-                else
-                    knownForString += "${movie.name}, "
-            }
-        }
-
-        return knownForString
-    }
 
     fun getFullProfilePath(): String{
         return "https://image.tmdb.org/t/p/w185${this.profilePath}"
@@ -97,6 +81,7 @@ data class Person(
     fun createSharedCredit(credit: Credit): SharedProject{
         val sharedProject = SharedProject(
             id = credit.id,
+            creditId = "${credit.id}${credit.mediaType}",
             posterPath = credit.posterPath,
             popularity = credit.popularity,
             summary = credit.overview,
@@ -119,10 +104,8 @@ data class Person(
         for(credit in credits){
             if(credit.id == creditId){
                 if(creditNames.isEmpty()){
-                    creditNames = if(credit.characterName.isEmpty()){
+                    creditNames = credit.characterName.ifEmpty {
                         credit.job
-                    } else {
-                        credit.characterName
                     }
                 } else {
                     creditNames += if(credit.characterName.isEmpty()){

@@ -8,5 +8,7 @@ enum class CostarsScreens(@StringRes val title: Int){
     PeopleSelectScreen(title = R.string.people_select_screen),
     ComparisonScreen(title = R.string.comparison_screen),
     ProjectDetailsScreen(title = R.string.project_details_screen),
-    AboutScreen(title = R.string.about_screen)
+    AboutScreen(title = R.string.about_screen),
+    OnboardingScreen(title = R.string.onboarding),
+    HistoryScreen(title = R.string.history)
 }

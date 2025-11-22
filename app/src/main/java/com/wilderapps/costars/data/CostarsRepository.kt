@@ -10,18 +10,47 @@ interface CostarsRepository{
 }
 
 class NetworkCostarsRepository(private val costarsApiService: CostarsApiService): CostarsRepository{
-    override suspend fun getPeople(query: String): List<Person>? {
-        return try{
+    override suspend fun getPeople(query: String): List<Person> {
+        val people = mutableListOf<Person>()
+
+        try{
             val res = costarsApiService.getPeople(query)
             if(res.isSuccessful){
-                res.body()?.results ?: emptyList()
-            } else {
-                emptyList()
+                res.body()?.results?.let { people.addAll(it) }
             }
         } catch (e: Exception){
             e.printStackTrace()
-            null
         }
+
+        if(people.isNotEmpty()){
+            for(i in people){
+                var knownForString = ""
+                var isMovie: Boolean
+
+                for((index, movie) in i.knownFor.withIndex()){
+                    isMovie = movie.mediaType == "movie"
+                    if(isMovie) {
+                        if (i.knownFor.size == 1)
+                            knownForString = movie.title
+                        else if (index == i.knownFor.lastIndex)
+                            knownForString += "& ${movie.title}"
+                        else
+                            knownForString += "${movie.title}, "
+                    } else {
+                        if (i.knownFor.size == 1)
+                            knownForString = movie.name
+                        else if (index == i.knownFor.lastIndex)
+                            knownForString += "& ${movie.name}"
+                        else
+                            knownForString += "${movie.name}, "
+                    }
+                }
+
+                i.knownForString = knownForString
+            }
+        }
+
+        return people
     }
 
     override suspend fun getCredits(id: String): List<Credit>{

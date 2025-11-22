@@ -6,4 +6,21 @@
     <string name="comparison_screen">Comparison</string>
     <string name="project_details_screen">Details</string>
     <string name="about_screen">About</string>
+    <string name="onboarding">Welcome</string>
+    <string name="history">Search History</string>
+    <string name="onboarding_title_1">Getting Started</string>
+    <string name="onboarding_title_2">Selecting People</string>
+    <string name="onboarding_title_3">Compare Filmography</string>
+    <string name="onboarding_title_4">Shared Filmography</string>
+    <string name="onboarding_title_5">Project Details</string>
+    <string name="onboarding_1">To get started simply tap the + at the top.</string>
+    <string name="onboarding_2">Search for someone that has been in a movie or TV show.
+        As long as they are listed on TMDB.org you can select them. </string>
+    <string name="onboarding_3">Once you have at least 2 people chosen tap Compare Filmography to see what projects they have in common.
+        You can add as many people as you want.</string>
+    <string name="onboarding_4">A list of shared filmography will be displayed as long as the people you have selected have projects in common.
+        You will be told there is no shared projects if that is the case.
+        You can tap on a movie or TV show for more information about the project.</string>
+    <string name="onboarding_5">The details screen will give you more information about the project
+        ranging from synopsis to release date as well as the roles of the people you selected.</string>
 </resources>

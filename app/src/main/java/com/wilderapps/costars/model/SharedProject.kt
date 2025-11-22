@@ -2,6 +2,7 @@ package com.wilderapps.costars.model
 
 data class SharedProject(
     var id: Int = 0,
+    var creditId: String = "",
     var title: String = "",
     var posterPath: String? = "",
     var popularity: Double = 0.00,

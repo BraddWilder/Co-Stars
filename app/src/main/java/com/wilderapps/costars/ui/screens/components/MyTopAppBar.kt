@@ -16,7 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.wilderapps.costars.R
 import com.wilderapps.costars.data.CostarsScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,7 +28,9 @@ fun MyTopAppBar(
     canNavigateBack: Boolean,
     onNavigateUpClicked: () -> Unit,
     onAboutClicked: () -> Unit,
-    onAddClicked: () -> Unit
+    onGettingStartedClicked: () -> Unit,
+    onAddClicked: () -> Unit,
+    onHistoryClicked: () -> Unit
 ){
     var menuExpanded by remember{
         mutableStateOf(false)
@@ -51,6 +55,13 @@ fun MyTopAppBar(
                         contentDescription = "Add new person"
                     )
                 }
+                IconButton(
+                    onClick = onHistoryClicked){
+                    Icon(
+                        painter = painterResource(R.drawable.history),
+                        contentDescription = "See search history"
+                    )
+                }
             }
             IconButton(onClick = { menuExpanded = !menuExpanded }) {
                 Icon(
@@ -62,6 +73,13 @@ fun MyTopAppBar(
                 expanded = menuExpanded ,
                 onDismissRequest = { menuExpanded = false })
             {
+                DropdownMenuItem(
+                    text = {Text("Getting Started")},
+                    onClick = {
+                        menuExpanded = false
+                        onGettingStartedClicked()
+                    }
+                )
                 DropdownMenuItem(
                     text = {Text("About")},
                     onClick = {

@@ -57,7 +57,7 @@ class QueryViewModel (private val costarsRepository: CostarsRepository): ViewMod
             for(person in selectedPeople){
                 if(person.credits.isEmpty()) {
                     try {
-                        val credits = costarsRepository.getCredits(person.id.toString())
+                        val credits = costarsRepository.getCredits(person.personId.toString())
                         if (credits != null)
                             person.credits = credits
                     } catch (e: Exception) {

@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
@@ -23,9 +24,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.wilderapps.costars.data.CostarsScreens
+import com.wilderapps.costars.data.getDummyHistorySearch
+import com.wilderapps.costars.presentation.onboarding.OnBoardingScreen
+import com.wilderapps.costars.presentation.onboarding.OnBoardingViewModel
 import com.wilderapps.costars.ui.screens.aboutScreen.AboutScreen
 import com.wilderapps.costars.ui.screens.comparisonScreen.ComparisonScreen
 import com.wilderapps.costars.ui.screens.components.MyTopAppBar
+import com.wilderapps.costars.ui.screens.historyScreen.HistoryScreen
 import com.wilderapps.costars.ui.screens.peopleSelectScreen.PeopleSelectScreen
 import com.wilderapps.costars.ui.screens.projectDetailsScreen.ProjectDetailsScreen
 import com.wilderapps.costars.ui.screens.queryScreen.QueryScreen
@@ -35,8 +40,10 @@ import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 @Composable
 fun CostarsApp(
     viewModel: QueryViewModel = viewModel(factory = QueryViewModel.Factory),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    startDestination: String
 ){
+
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = CostarsScreens.valueOf(
         backStackEntry?.destination?.route ?: CostarsScreens.PeopleSelectScreen.name
@@ -56,17 +63,21 @@ fun CostarsApp(
     }
     Scaffold (
         topBar = {
-            MyTopAppBar(
-                currentScreen = currentScreen,
-                canNavigateBack = canNavigateBack,
-                onNavigateUpClicked = { navController.navigateUp() },
-                onAboutClicked = { navController.navigate(CostarsScreens.AboutScreen.name) },
-                onAddClicked = {
-                    if(backStackEntry!!.lifecycleIsResumed()) {
-                        viewModel.selectedPersonIndex = -1
-                        navController.navigate(CostarsScreens.QueryScreen.name)
-                    }
-                })
+            if(currentScreen != CostarsScreens.OnboardingScreen) {
+                MyTopAppBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = canNavigateBack,
+                    onNavigateUpClicked = { navController.navigateUp() },
+                    onAboutClicked = { navController.navigate(CostarsScreens.AboutScreen.name) },
+                    onGettingStartedClicked = { navController.navigate(CostarsScreens.OnboardingScreen.name)},
+                    onAddClicked = {
+                        if (backStackEntry!!.lifecycleIsResumed()) {
+                            viewModel.selectedPersonIndex = -1
+                            navController.navigate(CostarsScreens.QueryScreen.name)
+                        }
+                    },
+                    onHistoryClicked = { navController.navigate(CostarsScreens.HistoryScreen.name) })
+            }
         }
     ) {
         innerPadding ->
@@ -74,7 +85,7 @@ fun CostarsApp(
         //PeopleSelectScreen(viewModel = viewModel, modifier = Modifier.padding(innerPadding))
         NavHost(
             navController = navController,
-            startDestination = CostarsScreens.PeopleSelectScreen.name,
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ){
             composable(route = CostarsScreens.PeopleSelectScreen.name){from: NavBackStackEntry ->
@@ -149,6 +160,21 @@ fun CostarsApp(
             }
             composable(route = CostarsScreens.AboutScreen.name){
                 AboutScreen()
+            }
+            composable(route = CostarsScreens.OnboardingScreen.name){
+                val onBoardingViewModel: OnBoardingViewModel = hiltViewModel()
+                OnBoardingScreen(
+                    event = onBoardingViewModel::onEvent,
+                    onGetStartedClick = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+            composable(route = CostarsScreens.HistoryScreen.name){
+                HistoryScreen(
+                    getDummyHistorySearch(),
+                    modifier = Modifier
+                )
             }
         }
     }

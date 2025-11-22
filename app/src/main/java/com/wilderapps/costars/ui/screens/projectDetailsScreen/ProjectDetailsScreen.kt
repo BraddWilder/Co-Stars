@@ -25,8 +25,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.wilderapps.costars.R
 import com.wilderapps.costars.model.SharedProject
-import com.wilderapps.costars.ui.screens.components.BannerAd
-import com.wilderapps.costars.ui.screens.components.PersonItem
+import com.wilderapps.costars.ui.screens.components.PersonRow
 import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 
 @Composable
@@ -125,11 +124,10 @@ fun ProjectDetailsScreen(
             ) {
                 items(
                     items = viewModel.selectedPeople,
-                    key = { person -> person.id }
+                    key = { person -> person.personId }
                 ) { person ->
-                    PersonItem(
+                    PersonRow(
                         person = person,
-                        onPersonClick = {},
                         nameStyle = nameStyle,
                         knownForStyle = creditStyle,
                         creditId = sharedProject.id,
@@ -139,6 +137,6 @@ fun ProjectDetailsScreen(
                 }
             }
         }
-        BannerAd()
+//        BannerAd()
     }
 }

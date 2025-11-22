@@ -15,9 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.ads.AdSize
 import com.wilderapps.costars.model.Person
-import com.wilderapps.costars.ui.screens.components.BannerAd
 import com.wilderapps.costars.ui.screens.components.PersonItem
 import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 
@@ -57,44 +55,47 @@ fun PeopleSelectScreen(
                         },
                         modifier = Modifier
                             .height(200.dp)
+                            .weight(1f)
                     )
                 }
             }
 
-            Row(horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp)) {
-                var isCompareAvailable = false
-                var isClearAvailable = false
-                if(viewModel.selectedPeople.size > 1) {
-                    isCompareAvailable = true
-                }
-                if(viewModel.selectedPeople.size > 0){
-                    isClearAvailable = true
-                }
 
-                Button(
-                    onClick = onClearClick,
-                    enabled = isClearAvailable
-                ){
-                    Text("Clear Selected People")
-                }
+        }
 
-                Button(
-                    onClick = onCompareClick,
-                    enabled = isCompareAvailable
-                ) {
-                    Text("Compare filmography")
-                }
+        Row(horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)) {
+            var isCompareAvailable = false
+            var isClearAvailable = false
+            if(viewModel.selectedPeople.size > 1) {
+                isCompareAvailable = true
+            }
+            if(viewModel.selectedPeople.size > 0){
+                isClearAvailable = true
+            }
+
+            Button(
+                onClick = onClearClick,
+                enabled = isClearAvailable
+            ){
+                Text("Clear Selected People")
+            }
+
+            Button(
+                onClick = onCompareClick,
+                enabled = isCompareAvailable
+            ) {
+                Text("Compare filmography")
             }
         }
 
-        Row(
-            modifier = Modifier.height(AdSize.BANNER.height.dp)
-        ) {
-            BannerAd()
-        }
+//        Row(
+//            modifier = Modifier.height(AdSize.BANNER.height.dp)
+//        ) {
+//            BannerAd()
+//        }
     }
 }

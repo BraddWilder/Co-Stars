@@ -30,7 +30,6 @@ import coil.request.ImageRequest
 import com.wilderapps.costars.R
 import com.wilderapps.costars.data.getDummyProject
 import com.wilderapps.costars.model.SharedProject
-import com.wilderapps.costars.ui.screens.components.BannerAd
 import com.wilderapps.costars.ui.screens.queryScreen.QueryViewModel
 
 @Composable
@@ -53,7 +52,7 @@ fun ComparisonScreen(
                 )
             }
         }
-        BannerAd()
+//        BannerAd()
     }
 }
 
@@ -139,7 +138,7 @@ fun SharedProjectList(
     LazyColumn {
         items(
             items = sharedProjects,
-            key = { sharedProject -> sharedProject.id }) {
+            key = { sharedProject -> sharedProject.creditId }) {
             sharedProject ->
             SharedProjectItem(
                 sharedProject = sharedProject,
